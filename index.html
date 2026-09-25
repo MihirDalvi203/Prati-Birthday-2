@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Happy Birthday Prati 🎂</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎀</text></svg>">
+<style>
+  :root{
+    --bg:#fff5f8;
+    --bg2:#ffe3ee;
+    --card:#ffffff;
+    --text:#3a2530;
+    --text-soft:#7a5c68;
+    --pink:#ff5d8f;
+    --pink-deep:#e83a72;
+    --pink-pale:#ffd3e3;
+    --gold:#ffb648;
+    --shadow: 0 10px 30px rgba(232,58,114,0.15);
+  }
+  :root:not([data-theme="light"]) {
+    @media (prefers-color-scheme: dark) {
+      --bg:#1c1117;
+      --bg2:#2a1620;
+      --card:#2b1a23;
+      --text:#ffe9f1;
+      --text-soft:#e3b8c9;
+      --pink:#ff7aa8;
+      --pink-deep:#ff9dbd;
+      --pink-pale:#4a2433;
+      --gold:#ffcb70;
+      --shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#1c1117;--bg2:#2a1620;--card:#2b1a23;--text:#ffe9f1;--text-soft:#e3b8c9;
+    --pink:#ff7aa8;--pink-deep:#ff9dbd;--pink-pale:#4a2433;--gold:#ffcb70;
+    --shadow: 0 10px 30px rgba(0,0,0,0.4);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth; scroll-padding-top:env(safe-area-inset-top,0px);}
+  body{
+    margin:0;
+    background: linear-gradient(160deg,var(--bg),var(--bg2));
+    color:var(--text);
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    overflow-x:hidden;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  .heart-canvas{position:fixed;inset:0;pointer-events:none;z-index:9999;}
+  section{
+    min-height:100svh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding:60px 20px;
+    position:relative;
+    text-align:center;
+  }
+  h1{
+    font-family: 'Brush Script MT', 'Segoe Script', cursive;
+    font-size:clamp(2.5rem,9vw,5rem);
+    color:var(--pink-deep);
+    margin:0 0 10px;
+    text-shadow: 0 4px 20px rgba(232,58,114,0.25);
+  }
+  h2{
+    font-size:clamp(1.5rem,5vw,2.4rem);
+    color:var(--pink-deep);
+    margin-bottom:8px;
+  }
+  p{color:var(--text-soft); line-height:1.6; font-size:1.05rem;}
+  .sub{font-size:clamp(1rem,3vw,1.3rem); color:var(--text-soft); margin-bottom:30px;}
+  .btn{
+    background:linear-gradient(135deg,var(--pink),var(--pink-deep));
+    color:#fff; border:none; padding:14px 30px; border-radius:50px;
+    font-size:1.05rem; font-weight:600; cursor:pointer; box-shadow:var(--shadow);
+    transition:transform .2s ease; -webkit-tap-highlight-color:transparent;
+  }
+  .btn:active{transform:scale(0.95);}
+  .scrolldown{margin-top:50px; font-size:2rem; color:var(--pink); animation:bounce 2s infinite;}
+  @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(14px);}}
+
+  /* Counter */
+  .counter-wrap{display:flex; gap:14px; flex-wrap:wrap; justify-content:center; margin:20px 0 30px;}
+  .counter-box{
+    background:var(--card); border-radius:18px; padding:16px 14px; min-width:78px;
+    box-shadow:var(--shadow);
+  }
+  .counter-num{font-size:clamp(1.6rem,6vw,2.4rem); font-weight:800; color:var(--pink-deep);}
+  .counter-label{font-size:0.75rem; color:var(--text-soft); text-transform:uppercase; letter-spacing:1px;}
+
+  /* Nicknames */
+  .nick-badge{
+    display:inline-block; background:var(--pink-pale); color:var(--pink-deep);
+    padding:10px 26px; border-radius:50px; font-weight:700; font-size:1.4rem;
+    box-shadow:var(--shadow); cursor:pointer; user-select:none; margin:20px 0;
+    transition:transform .15s ease;
+  }
+  .nick-badge:active{transform:scale(0.92) rotate(-3deg);}
+  .nick-hint{font-size:0.85rem; color:var(--text-soft);}
+
+  /* Gallery */
+  .gallery-title{margin-bottom:6px;}
+  .gallery{
+    columns: 2 220px; column-gap:14px; width:100%; max-width:900px; margin-top:20px;
+  }
+  @media(min-width:700px){ .gallery{columns:3 220px;} }
+  .g-item{
+    break-inside:avoid; margin-bottom:14px; border-radius:16px; overflow:hidden;
+    box-shadow:var(--shadow); opacity:0; transform:translateY(40px) scale(0.96);
+    transition:opacity .7s ease, transform .7s ease; position:relative; cursor:pointer;
+    background:var(--card);
+  }
+  .g-item.show{opacity:1; transform:translateY(0) scale(1);}
+  .g-item img{width:100%; display:block;}
+  .g-cap{
+    font-size:0.78rem; color:var(--text-soft); padding:8px 10px; text-align:left;
+  }
+
+  /* Lightbox */
+  .lightbox{
+    position:fixed; inset:0; background:rgba(0,0,0,0.85); display:none;
+    align-items:center; justify-content:center; z-index:500; padding:20px;
+    padding-top:calc(20px + env(safe-area-inset-top,0px));
+  }
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:100%; max-height:70vh; border-radius:12px;}
+  .lightbox-cap{color:#fff; margin-top:14px; font-size:1rem; max-width:500px;}
+  .lightbox-close{position:absolute; top:calc(20px + env(safe-area-inset-top,0px)); right:20px; color:#fff; font-size:2rem; background:none; border:none; cursor:pointer;}
+
+  /* Envelope / letter */
+  .envelope{
+    width:220px; height:150px; position:relative; cursor:pointer; margin:30px auto;
+    filter:drop-shadow(var(--shadow));
+  }
+  .env-body{
+    position:absolute; inset:0; background:linear-gradient(135deg,var(--pink),var(--pink-deep));
+    border-radius:10px;
+  }
+  .env-flap{
+    position:absolute; top:0; left:0; width:100%; height:0; border-left:110px solid transparent;
+    border-right:110px solid transparent; border-top:75px solid var(--pink-deep);
+    transform-origin:top; transition:transform .6s ease; border-radius:10px 10px 0 0;
+  }
+  .envelope.opened .env-flap{transform:rotateX(180deg);}
+  .env-heart{position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); font-size:1.8rem;}
+  .letter-paper{
+    max-width:560px; background:var(--card); border-radius:16px; padding:30px 26px;
+    box-shadow:var(--shadow); text-align:left; margin-top:10px; display:none;
+    animation:riseIn .6s ease;
+  }
+  .letter-paper.show{display:block;}
+  @keyframes riseIn{from{opacity:0; transform:translateY(30px);}to{opacity:1; transform:translateY(0);}}
+  .letter-paper p{color:var(--text); font-size:1.05rem;}
+  .letter-sign{text-align:right; font-style:italic; color:var(--pink-deep); font-weight:700; margin-top:16px;}
+
+  /* Quiz */
+  .quiz-card{
+    background:var(--card); border-radius:20px; padding:28px 22px; max-width:520px;
+    width:100%; box-shadow:var(--shadow); margin-top:20px;
+  }
+  .quiz-q{font-weight:700; margin-bottom:14px; font-size:1.1rem;}
+  .quiz-opts{display:grid; gap:10px;}
+  .quiz-opt{
+    background:var(--pink-pale); border:none; border-radius:12px; padding:12px 14px;
+    font-size:0.98rem; color:var(--text); cursor:pointer; text-align:left; transition:background .2s;
+  }
+  .quiz-opt.correct{background:#8ee6a8; color:#154a24;}
+  .quiz-opt.wrong{background:#ffb3b3; color:#6a1414;}
+  .quiz-fact{margin-top:14px; font-size:0.95rem; color:var(--text-soft); display:none;}
+  .quiz-fact.show{display:block;}
+  .quiz-progress{font-size:0.85rem; color:var(--text-soft); margin-bottom:10px;}
+  .quiz-next{margin-top:16px; display:none;}
+  .quiz-next.show{display:inline-block;}
+  .quiz-final{display:none; text-align:center;}
+  .quiz-final.show{display:block;}
+
+  /* Bite game */
+  .bite-zone{
+    background:var(--card); border-radius:20px; padding:30px 22px; max-width:400px;
+    box-shadow:var(--shadow); margin-top:10px;
+  }
+  .bite-target{
+    font-size:4rem; cursor:pointer; user-select:none; transition:transform .15s ease;
+    display:inline-block;
+  }
+  .bite-target:active{transform:scale(0.8) rotate(-10deg);}
+  .bite-count{font-size:1.3rem; font-weight:700; color:var(--pink-deep); margin-top:10px;}
+  .bite-phrase{font-size:1.1rem; color:var(--text-soft); min-height:28px; margin-top:6px;}
+
+  footer{padding:60px 20px 100px; text-align:center;}
+  .fade-tag{font-size:0.8rem; color:var(--text-soft); opacity:0.6; margin-top:40px;}
+</style>
+</head>
+<body>
+<canvas class="heart-canvas" id="heartCanvas"></canvas>
+
+<!-- HERO -->
+<section id="hero">
+  <h1>Happy Birthday</h1>
+  <h1 style="margin-top:-20px;">Prati 🎀</h1>
+  <p class="sub" id="heroNick">my Bablu Shablu, my Dikoda, my favorite weirdo</p>
+  <button class="btn" id="heroBtn">tap for hearts 💗</button>
+  <div class="scrolldown">↓</div>
+</section>
+
+<!-- COUNTER -->
+<section id="counter">
+  <h2>Us, so far</h2>
+  <p class="sub">since our first date — 17 April 2024</p>
+  <div class="counter-wrap">
+    <div class="counter-box"><div class="counter-num" id="c-days">0</div><div class="counter-label">days</div></div>
+    <div class="counter-box"><div class="counter-num" id="c-hours">0</div><div class="counter-label">hrs</div></div>
+    <div class="counter-box"><div class="counter-num" id="c-mins">0</div><div class="counter-label">mins</div></div>
+    <div class="counter-box"><div class="counter-num" id="c-secs">0</div><div class="counter-label">secs</div></div>
+  </div>
+  <p>and every one of them has been better with you in it. 💕</p>
+</section>
+
+<!-- NICKNAMES -->
+<section id="nicknames">
+  <h2>Tap. I dare you.</h2>
+  <div class="nick-badge" id="nickBadge">Bablu Shablu</div>
+  <p class="nick-hint">(you have 6 names. I'm not sorry.)</p>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <h2 class="gallery-title">Us, in pictures</h2>
+  <p class="sub">scroll and watch them fall into place</p>
+  <div class="gallery" id="galleryGrid"></div>
+</section>
+
+<!-- LETTER -->
+<section id="letter">
+  <h2>A little something for you</h2>
+  <p class="sub">click the envelope</p>
+  <div class="envelope" id="envelope">
+    <div class="env-body"></div>
+    <div class="env-heart">💌</div>
+    <div class="env-flap"></div>
+  </div>
+  <div class="letter-paper" id="letterPaper">
+    <p>My Prati,</p>
+    <p>Two years, five months and two days — and somehow you still manage to surprise me. Whether it's you plotting to give school bags to kids who needed them more than either of us needed anything, or threatening to bite me and actually meaning it ("kha jaungii", I know you mean it) — you are the funniest, kindest, weirdest, most wonderful person I have ever gotten to love.</p>
+    <p>I built this whole silly website just so I'd have one more way to tell you: I love you, Gondushki. I love your chaos, your kindness, your terrible-adorable threats, and every single face you make when you're about to say something unhinged.</p>
+    <p>Here's to many more years of hand-cooked food, bad jokes, and you biting me for absolutely no reason.</p>
+    <p>Happy Birthday, my Shontyaa. 🎂💗</p>
+    <div class="letter-sign">— always yours</div>
+  </div>
+</section>
+
+<!-- QUIZ -->
+<section id="quiz">
+  <h2>How well do you know "us"?</h2>
+  <p class="sub">just for fun — you basically wrote this story</p>
+  <div class="quiz-card" id="quizCard"></div>
+</section>
+
+<!-- BITE GAME -->
+<section id="bite">
+  <h2>"Kha Jaungii" mode</h2>
+  <p class="sub">tap the heart before it runs away</p>
+  <div class="bite-zone">
+    <div class="bite-target" id="biteTarget">❤️</div>
+    <div class="bite-count">Bites landed: <span id="biteCount">0</span></div>
+    <div class="bite-phrase" id="bitePhrase"></div>
+  </div>
+</section>
+
+<footer>
+  <h2>To Prati,</h2>
+  <p style="max-width:480px; margin:0 auto;">the sweetest, kindest, quirkiest, funniest human I know — Dugaa, Baikodi, my whole heart. Happy Birthday. Here's to us. 💕</p>
+  <button class="btn" id="footerBtn" style="margin-top:20px;">one more for the road 🎈</button>
+  <div class="fade-tag">made with love (and a little bit of code) — for Prati</div>
+</footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">&times;</button>
+  <div style="text-align:center;">
+    <img id="lightboxImg" src="" alt="">
+    <div class="lightbox-cap" id="lightboxCap"></div>
+  </div>
+</div>
+
+<script>
+/* ---------- IMAGE DATA ---------- */
+const IMAGES = [{"src": "assets/prati-01.jpg", "cap": "Sweetest, kindest weirdo in the room."}, {"src": "assets/prati-02.jpg", "cap": "Dugaa doing what Dugaa does best."}, {"src": "assets/prati-03.jpg", "cap": "Bablu Shablu strikes again."}, {"src": "assets/prati-04.jpg", "cap": "5% sweet, 95% \u201ckha jaungii\u201d threats."}, {"src": "assets/prati-05.jpg", "cap": "Baikodi on a good hair day (every day)."}, {"src": "assets/prati-06.jpg", "cap": "This smile is a whole personality."}, {"src": "assets/prati-07.jpg", "cap": "23.04.2024 energy, every single day."}, {"src": "assets/prati-08.jpg", "cap": "This is what \u2018soft but unhinged\u2019 looks like."}, {"src": "assets/prati-09.jpg", "cap": "Two years, five months, two days (and counting) of this exact chaos."}, {"src": "assets/prati-10.jpg", "cap": "Every photo of her is a personality trait."}, {"src": "assets/prati-11.jpg", "cap": "My favorite hand-cooked-food critic."}, {"src": "assets/prati-12.jpg", "cap": "Certified Gondushki behavior."}, {"src": "assets/prati-13.jpg", "cap": "17.04.2024 called \u2014 it wants its magic back."}, {"src": "assets/prati-14.jpg", "cap": "Dikoda, unbothered, iconic."}, {"src": "assets/prati-15.jpg", "cap": "Bablu Shablu, caught being adorable again."}, {"src": "assets/prati-16.jpg", "cap": "Gondushki, plotting something weird and wonderful."}, {"src": "assets/prati-17.jpg", "cap": "A certified menace. My menace."}, {"src": "assets/prati-18.jpg", "cap": "The reason my phone gallery is 90% her."}, {"src": "assets/prati-19.jpg", "cap": "Proof that chaos can be cute."}, {"src": "assets/prati-20.jpg", "cap": "Shontyaa, mid-laugh, as usual."}, {"src": "assets/prati-21.jpg", "cap": "Warning: will bite. Will also steal your heart."}, {"src": "assets/prati-22.jpg", "cap": "The quirkiest, funniest human I know."}, {"src": "assets/prati-23.jpg", "cap": "Dikoda energy, fully unleashed."}, {"src": "assets/prati-24.jpg", "cap": "She once tried to donate school supplies to kids who needed them more than she needed anything. That's just who she is."}, {"src": "assets/prati-25.jpg", "cap": "The girl who wanted to give homeless kids school bags before she wanted anything for herself."}, {"src": "assets/prati-26.jpg", "cap": "This is the smile that ruins my productivity."}, {"src": "assets/prati-27.jpg", "cap": "This face has bitten me at least twice."}];
+
+/* ---------- Falling / bursting hearts canvas ---------- */
+const canvas = document.getElementById('heartCanvas');
+const ctx = canvas.getContext('2d');
+function resizeCanvas(){canvas.width = innerWidth; canvas.height = innerHeight;}
+resizeCanvas();
+addEventListener('resize', resizeCanvas);
+let particles = [];
+function spawnHearts(x, y, count){
+  for(let i=0;i<count;i++){
+    particles.push({
+      x: x ?? Math.random()*canvas.width,
+      y: y ?? canvas.height + 20,
+      vx: (Math.random()-0.5)*3,
+      vy: -(Math.random()*3+2),
+      size: Math.random()*16+10,
+      life: 1,
+      color: Math.random()>0.5 ? '#ff5d8f' : '#ffb648',
+      rot: Math.random()*360
+    });
+  }
+}
+function drawHeart(px,py,size,color,rot,alpha){
+  ctx.save();
+  ctx.translate(px,py);
+  ctx.rotate(rot*Math.PI/180);
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = color;
+  ctx.beginPath();
+  const s = size/16;
+  ctx.moveTo(0, 4*s);
+  ctx.bezierCurveTo(0,0,-8*s,0,-8*s,-4*s);
+  ctx.bezierCurveTo(-8*s,-8*s,0,-8*s,0,-2*s);
+  ctx.bezierCurveTo(0,-8*s,8*s,-8*s,8*s,-4*s);
+  ctx.bezierCurveTo(8*s,0,0,0,0,4*s);
+  ctx.fill();
+  ctx.restore();
+}
+function tick(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{
+    p.x += p.vx; p.y += p.vy; p.life -= 0.012; p.rot += 2;
+    drawHeart(p.x,p.y,p.size,p.color,p.rot,Math.max(p.life,0));
+  });
+  particles = particles.filter(p=>p.life>0);
+  requestAnimationFrame(tick);
+}
+tick();
+document.getElementById('heroBtn').addEventListener('click', e=>{
+  const r = e.target.getBoundingClientRect();
+  spawnHearts(r.left+r.width/2, r.top, 35);
+});
+document.getElementById('footerBtn').addEventListener('click', e=>{
+  const r = e.target.getBoundingClientRect();
+  spawnHearts(r.left+r.width/2, r.top, 35);
+});
+setInterval(()=>{ if(Math.random()>0.55) spawnHearts(undefined, undefined, 2); }, 900);
+
+/* ---------- Countdown "us so far" ---------- */
+const START = new Date('2024-04-17T00:00:00');
+function updateCounter(){
+  const now = new Date();
+  let diff = now - START;
+  const days = Math.floor(diff/86400000);
+  const hours = Math.floor((diff%86400000)/3600000);
+  const mins = Math.floor((diff%3600000)/60000);
+  const secs = Math.floor((diff%60000)/1000);
+  document.getElementById('c-days').textContent = days;
+  document.getElementById('c-hours').textContent = hours;
+  document.getElementById('c-mins').textContent = mins;
+  document.getElementById('c-secs').textContent = String(secs).padStart(2,'0');
+}
+updateCounter();
+setInterval(updateCounter, 1000);
+
+/* ---------- Nicknames cycle ---------- */
+const nicknames = ['Bablu Shablu','Dikoda','Shontyaa','Dugaa','Gondushki','Baikodi'];
+let nickIdx = 0;
+const nickBadge = document.getElementById('nickBadge');
+const heroNick = document.getElementById('heroNick');
+nickBadge.addEventListener('click', ()=>{
+  nickIdx = (nickIdx+1)%nicknames.length;
+  nickBadge.textContent = nicknames[nickIdx];
+  nickBadge.style.transform = 'scale(1.15) rotate(3deg)';
+  setTimeout(()=>nickBadge.style.transform='', 180);
+  const r = nickBadge.getBoundingClientRect();
+  spawnHearts(r.left+r.width/2, r.top, 12);
+});
+
+/* ---------- Gallery ---------- */
+const grid = document.getElementById('galleryGrid');
+IMAGES.forEach((im, i)=>{
+  const div = document.createElement('div');
+  div.className = 'g-item';
+  div.innerHTML = `<img src="${im.src}" loading="lazy" alt="us"><div class="g-cap">${im.cap}</div>`;
+  div.addEventListener('click', ()=>openLightbox(im));
+  grid.appendChild(div);
+});
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('show'); io.unobserve(en.target); } });
+}, {threshold:0.15});
+document.querySelectorAll('.g-item').forEach(el=>io.observe(el));
+
+function openLightbox(im){
+  document.getElementById('lightboxImg').src = im.src;
+  document.getElementById('lightboxCap').textContent = im.cap;
+  document.getElementById('lightbox').classList.add('open');
+}
+document.getElementById('lightboxClose').addEventListener('click', ()=>{
+  document.getElementById('lightbox').classList.remove('open');
+});
+document.getElementById('lightbox').addEventListener('click', e=>{
+  if(e.target.id==='lightbox') e.currentTarget.classList.remove('open');
+});
+
+/* ---------- Envelope / letter ---------- */
+const envelope = document.getElementById('envelope');
+envelope.addEventListener('click', ()=>{
+  envelope.classList.add('opened');
+  setTimeout(()=>{
+    document.getElementById('letterPaper').classList.add('show');
+    spawnHearts(innerWidth/2, innerHeight*0.4, 20);
+  }, 350);
+});
+
+/* ---------- Quiz ---------- */
+const quizData = [
+  {
+    q: "What date was our first date?",
+    opts: ["14 Feb 2024","17 April 2024","1 Jan 2024","23 April 2024"],
+    correct: 1,
+    fact: "17 April 2024 — the day it all started. 💫"
+  },
+  {
+    q: "What did Prati once plan to do for homeless kids?",
+    opts: ["Cook them dinner","Donate school utilities","Teach them cricket","Nothing, she's shy"],
+    correct: 1,
+    fact: "That's exactly the kind of quietly kind thing she does. 🥹"
+  },
+  {
+    q: "What does she say right before she bites?",
+    opts: ["\"Muahaha\"","\"Kha jaungii\"","\"Gotcha\"","\"Boop\""],
+    correct: 1,
+    fact: "\"Kha jaungii\" — a threat, a promise, a personality trait. 😂"
+  },
+  {
+    q: "How many nicknames does he have for her?",
+    opts: ["2","4","6","10"],
+    correct: 2,
+    fact: "Bablu Shablu, Dikoda, Shontyaa, Dugaa, Gondushki, Baikodi. All correct. All hers."
+  },
+  {
+    q: "What's her favorite thing he cooks?",
+    opts: ["Nothing, he can't cook","Anything hand-cooked by him","Only desserts","Instant noodles"],
+    correct: 1,
+    fact: "Hand-cooked food, made with love — her favorite. 🍲"
+  }
+];
+let qIdx = 0;
+const quizCard = document.getElementById('quizCard');
+function renderQuiz(){
+  if(qIdx >= quizData.length){
+    quizCard.innerHTML = `<div class="quiz-final show"><h2 style="margin-top:0;">You know us perfectly. 💗</h2><p>(honestly, you lived it — of course you do)</p></div>`;
+    spawnHearts(innerWidth/2, innerHeight*0.5, 30);
+    return;
+  }
+  const item = quizData[qIdx];
+  quizCard.innerHTML = `
+    <div class="quiz-progress">Question ${qIdx+1} of ${quizData.length}</div>
+    <div class="quiz-q">${item.q}</div>
+    <div class="quiz-opts">
+      ${item.opts.map((o,i)=>`<button class="quiz-opt" data-i="${i}">${o}</button>`).join('')}
+    </div>
+    <div class="quiz-fact" id="quizFact">${item.fact}</div>
+    <button class="btn quiz-next" id="quizNext">Next →</button>
+  `;
+  quizCard.querySelectorAll('.quiz-opt').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const i = parseInt(btn.dataset.i);
+      quizCard.querySelectorAll('.quiz-opt').forEach(b=>b.disabled=true);
+      if(i === item.correct){ btn.classList.add('correct'); }
+      else { btn.classList.add('wrong'); quizCard.querySelectorAll('.quiz-opt')[item.correct].classList.add('correct'); }
+      document.getElementById('quizFact').classList.add('show');
+      document.getElementById('quizNext').classList.add('show');
+    });
+  });
+  document.getElementById('quizNext').addEventListener('click', ()=>{ qIdx++; renderQuiz(); });
+}
+renderQuiz();
+
+/* ---------- Bite game ---------- */
+const biteTarget = document.getElementById('biteTarget');
+const bitePhrases = ['Kha jaungii! 😋','Got you again!',"You can't run from Baikodi!",'Mwahaha 🦷','One more bite~'];
+let bites = 0;
+function moveTarget(){
+  const zone = biteTarget.parentElement;
+  const maxX = zone.clientWidth - 70;
+  biteTarget.style.marginLeft = (Math.random()*maxX*0.5) + 'px';
+}
+biteTarget.addEventListener('click', (e)=>{
+  bites++;
+  document.getElementById('biteCount').textContent = bites;
+  document.getElementById('bitePhrase').textContent = bitePhrases[Math.floor(Math.random()*bitePhrases.length)];
+  const r = biteTarget.getBoundingClientRect();
+  spawnHearts(r.left+r.width/2, r.top, 8);
+  if(bites % 3 !== 0) moveTarget(); else biteTarget.style.marginLeft = '0px';
+});
+</script>
+</body>
+</html>
